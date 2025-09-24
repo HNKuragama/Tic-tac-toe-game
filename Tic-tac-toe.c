@@ -3,7 +3,10 @@
 #include <stdbool.h>
 #include <time.h>
 
+#define maxBoardSize 10
+#define minBoardSize 3
 #define Log_File "Tic_Tac_toe_Log.txt"
+#define modesCount 3
 
 int SelectMode();
 void Two_player_mode(int* row, int* column, char** board, int size);
@@ -11,6 +14,7 @@ void Player_vs_computer(int* row, int* column, char** board,char current_player,
 char** initialize_board(int size);
 void display_board(char** board, int size);
 void getPlayerMove(int* row, int* column, char** board, int size);
+void MultiPlayer(int* row, int* column, char** board, char current_player, int size);
 bool validateMove(int row, int column, char** board, int size);
 void GenerateComputerMove(int* row, int* column, char** board, int size);
 bool check_Win(char** board, int size, char player_Symbol);
@@ -32,9 +36,9 @@ int main()
 
     while(true)                                                                             //Game mode selection
     {
-        if(selection_No < 1 || selection_No > 2)
+        if(selection_No < 1 || selection_No > modesCount)
         {
-            printf("Invalid selection No -> Please select number from 1 to 2\n");
+            printf("Invalid selection No -> Please select number from 1 to 3\n");
             selection_No = SelectMode();
 
         }
@@ -48,7 +52,7 @@ int main()
 
     while(true)                                                                             //Getting board size
     {
-        if(board_size < 3 || board_size > 10)
+        if(board_size < minBoardSize || board_size > maxBoardSize)
         {
             printf("Invalid board size...!\n");
             printf("Enter size from 3 to 10...\n");
@@ -71,7 +75,7 @@ int main()
 
         if(selection_No == 1)
         {
-            printf("Player %c 's turn", current_Player);
+            printf("Player %c 's turn\n\n", current_Player);
             Two_player_mode(&row, &column, board, board_size);
 
         }
@@ -79,6 +83,11 @@ int main()
         {
             Player_vs_computer(&row, &column, board, current_Player, board_size);
 
+        }
+        else if(selection_No == 3)
+        {
+             printf("Player %c 's turn\n\n", current_Player);
+            MultiPlayer(&row, &column, board, current_Player, board_size);
         }
 
         board[row][column] = current_Player;
@@ -114,6 +123,15 @@ int main()
         {
             current_Player = (current_Player == 'X')? 'O' : 'X';
         }
+        else if(selection_No == 3)
+        {
+            if(current_Player == 'X')
+                current_Player = 'O';
+            else if(current_Player == 'O')
+                current_Player = 'Z';
+            else
+                current_Player = 'X';
+        }
 
 
     }
@@ -133,6 +151,7 @@ int SelectMode()
     printf("Select game mode ---->\n\n");
     printf("\t1. Two Player\n");
     printf("\t2. Player vs Computer\n");
+    printf("\t3. Multiplayer\n");
 
     scanf("%d", &selection);
 
@@ -161,6 +180,11 @@ void Player_vs_computer(int* row, int* column, char** board, char current_Player
     }
 }
 
+void MultiPlayer(int* row, int* column, char** board, char current_player, int size) //Multi player mode
+{
+    getPlayerMove(row, column, board, size);
+}
+
 char** initialize_board(int size)
 {
     char** board = (char**)malloc(size * sizeof(char*));
@@ -182,19 +206,27 @@ void display_board(char** board, int size)
     printf("\n");
     for(int i = 0; i < size; i++)
     {
+
+
+        printf("|");
         for(int j = 0; j < size; j++)
         {
             printf(" %c ", board[i][j]);
-            if(j < size - 1)
-                printf("|");
+            if(j < size)
+            printf("|");
         }
+
+
         printf("\n");
 
-        if(i < size -1)
+        if(i < size)
         {
             for(int j = 0; j < size; j++)
             {
-                printf("===");
+                if(j == 0)
+                    printf("====");
+                else
+                    printf("===");
 
                 if(j < size -1)
                     printf("|");
@@ -217,7 +249,7 @@ void getPlayerMove(int* row, int* column, char** board, int size)
 
         if(validateMove(*row, *column, board, size))
             break;
-        printf("Invalid move...Try again!");
+        printf("Invalid move...Try again!\n");
     }
 
 }
@@ -230,6 +262,25 @@ bool validateMove(int row, int column, char** board, int size)
 
 void GenerateComputerMove(int* row, int* column, char** board, int size)
 {
+    time_t start_t;
+    time_t current_t;
+	int seconds = 3;
+	int i = 0;
+
+	time(&start_t);
+
+	while(i <= seconds){
+		time(&current_t);
+
+		if(difftime(current_t, start_t) >= 1.0){
+			printf(">> ");
+			i++;
+			start_t = current_t;
+		}
+		else{
+			continue;
+		}
+	}
     srand(time(NULL));
 
     do
