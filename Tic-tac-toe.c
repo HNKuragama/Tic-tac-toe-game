@@ -32,6 +32,8 @@ int main()
     bool draw;
     int selection_No;
 
+    printf("\n");
+    printf("\t___Tic-Tac-Toe___\n\n");
     selection_No = SelectMode();
 
     while(true)                                                                             //Game mode selection
@@ -204,6 +206,16 @@ char** initialize_board(int size)
 void display_board(char** board, int size)
 {
     printf("\n");
+    for(int j = 0; j < size; j++)
+    {
+        if(j == 0 || j == size -1)
+            printf("==== ");
+        else
+            printf("=== ");
+    }
+
+    printf("\n");
+
     for(int i = 0; i < size; i++)
     {
 
@@ -223,7 +235,7 @@ void display_board(char** board, int size)
         {
             for(int j = 0; j < size; j++)
             {
-                if(j == 0)
+                if(j == 0 || j == size -1)
                     printf("====");
                 else
                     printf("===");
