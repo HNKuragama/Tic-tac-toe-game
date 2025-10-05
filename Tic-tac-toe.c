@@ -363,29 +363,51 @@ void logGameState(char** board, int size, int movecount)
 
     fprintf(logFile,"Move %d\n", movecount);
 
+    fprintf(logFile, "\n");
+    for(int j = 0; j < size; j++)
+    {
+        if(j == 0 || j == size -1)
+            fprintf(logFile, "==== ");
+        else
+            fprintf(logFile, "=== ");
+    }
+
+    fprintf(logFile, "\n");
+
     for(int i = 0; i < size; i++)
     {
+
+
+        fprintf(logFile, "|");
         for(int j = 0; j < size; j++)
         {
-            fprintf(logFile," %c ", board[i][j]);
-            if(j < size - 1)
-                fprintf(logFile,"|");
+            fprintf(logFile, " %c ", board[i][j]);
+            if(j < size)
+            fprintf(logFile, "|");
         }
-        fprintf(logFile,"\n");
 
-        if(i < size -1)
+
+        fprintf(logFile, "\n");
+
+        if(i < size)
         {
             for(int j = 0; j < size; j++)
             {
-                fprintf(logFile,"===");
+                if(j == 0 || j == size -1)
+                    fprintf(logFile, "====");
+                else
+                    fprintf(logFile, "===");
 
                 if(j < size -1)
-                    fprintf(logFile,"|");
+                    fprintf(logFile, "|");
             }
-            fprintf(logFile,"\n");
+            fprintf(logFile, "\n");
 
         }
+
+
     }
+
 
     fprintf(logFile, "\n");
     fclose(logFile);
